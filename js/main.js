@@ -43,7 +43,7 @@ const v = new Vue({
                         let stockData = window[`hq_str_${stock.fullSId}`];
                         stockData = stockData.split(',');
                         stock.name = stockData[0];
-                        stock.price = stockData[3];
+                        stock.price = Number(stockData[3]);
                     });
                     node.parentNode.removeChild(node);
                     resolve();
@@ -77,7 +77,7 @@ const v = new Vue({
                             const level = i + stock.warningList.length;
                             stock.warningList.push({
                                 id: level,
-                                price: stock.buyPrice * (1-level/10),
+                                price: Number((stock.buyPrice * (1-level/10)).toFixed(2)),
                                 bought: false
                             });
                         }
@@ -120,7 +120,7 @@ const v = new Vue({
                 fullSId: String(sid).startsWith('6') ? ('sh' + sid) : ('sz' + sid),
                 name: '',
                 price: '',
-                buyPrice: this.newStockBuyPrice,
+                buyPrice: Number(this.newStockBuyPrice),
                 hasLeftCostZone: false,
                 warningList: []
             });
