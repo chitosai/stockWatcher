@@ -37,7 +37,7 @@ const v = new Vue({
                     return stock.fullSId;
                 }).join(',')
                 const node = document.createElement('script');
-                node.src = 'http://hq.sinajs.cn/list=' + sids;
+                node.src = '//hq.sinajs.cn/list=' + sids;
                 node.addEventListener('load', () => {
                     this.stockList.forEach((stock) => {
                         let stockData = window[`hq_str_${stock.fullSId}`];
