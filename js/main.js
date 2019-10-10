@@ -56,8 +56,8 @@ const v = new Vue({
                 // 先遍历现有的warning
                 for( let i = 0; i < stock.warningList.length; i++ ) {
                     const warning = stock.warningList[i];
-                    // 如果当前股价已经回涨到该档位以上
-                    if( stock.price > warning.price ) {
+                    // 如果当前股价已经回涨到该档位的110%以上
+                    if( stock.price > warning.price * 1.1 ) {
                         // 1、买入了，需要等用户自己点击「已卖出」按钮
                         if( warning.bought ) {
                             this.notify(`${stock.name} 触及卖出价`);
