@@ -60,12 +60,17 @@ const v = new Vue({
                     if( stock.price > warning.price * 1.1 ) {
                         // 1、买入了，需要等用户自己点击「已卖出」按钮
                         if( warning.bought ) {
+                            warning.shouldSell = true;
                             this.notify(`${stock.name} 触及卖出价`);
                         } else {
                             // 2、没有买入，那么直接删除掉就行了
                             stock.warningList.splice(i--, 1);
-                            this.save();
                         }
+                        this.save();
+                    } else if( warning.shouldSell ) {
+                        // 如果当前价已经回到卖出价格下方了，就重置should-sell状态
+                        warning.shouldSell = false;
+                        this.save();
                     }
                 }
                 // 检查当前股价，如果低于建仓价则根据低于的比例生成档位提示
@@ -78,7 +83,8 @@ const v = new Vue({
                             stock.warningList.push({
                                 id: level,
                                 price: Number((stock.buyPrice * (1-level/10)).toFixed(2)),
-                                bought: false
+                                bought: false,
+                                shouldSell: false
                             });
                         }
                         this.save();
