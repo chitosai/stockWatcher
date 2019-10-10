@@ -13,7 +13,7 @@
         <div id="stock-list">
             <div class="stock" :class="{'has-left-cost-zone': stock.hasLeftCostZone}" v-for="stock in stockList">
                 <p class="stock-name">{{ stock.name }} <small>{{ stock.sid }}</small></p>
-                <p class="stock-info">现价：{{ stock.price }} 成本：{{ stock.buyPrice }}</p>
+                <p class="stock-info">现价：{{ stock.price }} 成本：{{ stock.buyPrice }} （{{ ((stock.price-stock.buyPrice)/stock.buyPrice*100).toFixed(1) }}%）</p>
                 <div class="stock-warning-list">
                     <div class="stock-warning" :class="{'stock-warning-should-buy': !warning.bought, 'stock-warning-shoudl-sell': warning.shouldSell}" v-for="warning in stock.warningList">
                         第 {{ warning.id }} 层 - 

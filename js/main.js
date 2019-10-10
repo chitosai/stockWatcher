@@ -93,9 +93,13 @@ const v = new Vue({
                 }
                 // 反之，当前价高于股价则判断是否脱离成本区
                 else {
-                    // 现在高出20%就算是脱离了吧
-                    if( stock.price / stock.buyPrice > 1.2 ) {
+                    // 现价高出20%就算是脱离了吧
+                    if( stock.price / stock.buyPrice > 1.2 && !stock.hasLeftCostZone ) {
                         stock.hasLeftCostZone = true;
+                        this.save();
+                    } else if( stock.hasLeftCostZone ) {
+                        stock.hasLeftCostZone = false;
+                        this.save();
                     }
                 }
             });
