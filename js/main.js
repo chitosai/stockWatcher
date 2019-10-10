@@ -72,7 +72,7 @@ const v = new Vue({
                 if( stock.price < stock.buyPrice ) {
                     const diff = Math.floor((stock.buyPrice-stock.price)/stock.buyPrice*10);
                     const delta = diff - stock.warningList.length;
-                    if( delta ) {
+                    if( delta > 0 ) {
                         for( let i = 1; i <= delta; i++ ) {
                             const level = i + stock.warningList.length;
                             stock.warningList.push({
