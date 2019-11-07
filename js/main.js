@@ -44,6 +44,10 @@ const v = new Vue({
                         stockData = stockData.split(',');
                         stock.name = stockData[0];
                         stock.price = Number(stockData[3]);
+                        stock.change = (stock.price-stock.buyPrice)/stock.buyPrice*100;
+                    });
+                    this.stockList.sort((a, b) => {
+                        return a.change - b.change;
                     });
                     node.parentNode.removeChild(node);
                     resolve();
@@ -130,6 +134,7 @@ const v = new Vue({
                 fullSId: String(sid).startsWith('6') ? ('sh' + sid) : ('sz' + sid),
                 name: '',
                 price: '',
+                change: 0,
                 buyPrice: Number(this.newStockBuyPrice),
                 hasLeftCostZone: false,
                 warningList: []
