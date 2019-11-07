@@ -164,6 +164,15 @@ const v = new Vue({
                 this.stockList = JSON.parse(data);
             }
         },
+        remove(stock) {
+            if( window.confirm(`你确定要删除 ${stock.name} 吗？`) ) {
+                const i = this.stockList.findIndex((s) => {
+                    return s.sid == stock.sid;
+                });
+                this.stockList.splice(i, 1);
+                this.save();
+            }
+        },
         async mainLoop() {
             if( isTradeTime() ) {
                 this.frame();

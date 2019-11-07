@@ -19,6 +19,7 @@ small{
     background: #fff;
     padding: 10px 15px;
     margin: 5px 0;
+    position: relative;
 }
 .has-left-cost-zone{
     opacity: .2;
@@ -48,4 +49,14 @@ small{
 }
 .stock-warning-should-sell{
     background: #f8ffc1;
+}
+.stock-remove{
+    display: none;
+    font-size: 20px;
+    position: absolute;
+    top: 20px;
+    right: 15px;
+}
+.stock:hover .stock-remove{
+    display: block;
 }
