@@ -60,21 +60,26 @@ const v = new Vue({
                 // 先遍历现有的warning
                 for( let i = 0; i < stock.warningList.length; i++ ) {
                     const warning = stock.warningList[i];
-                    // 如果当前股价已经回涨到该档位的110%以上
-                    if( stock.price > warning.price * 1.1 ) {
-                        // 1、买入了，需要等用户自己点击「已卖出」按钮
-                        if( warning.bought ) {
+                    if( warning.bought ) {
+                        // 该档位已买入
+                        // 需要判断当前股价是否达到该档位买入价的110%
+                        if( stock.price > warning.price * 1.1 ) {
+                            // 高于卖出价，提示卖出
                             warning.shouldSell = true;
                             this.notify(`${stock.name} 触及卖出价`);
-                        } else {
-                            // 2、没有买入，那么直接删除掉就行了
-                            stock.warningList.splice(i--, 1);
+                            this.save();
+                        } else if( warning.shouldSell ) {
+                            // 低于卖出价，移除卖出提醒
+                            warning.shouldSell = false;
+                            this.save();
                         }
-                        this.save();
-                    } else if( warning.shouldSell ) {
-                        // 如果当前价已经回到卖出价格下方了，就重置should-sell状态
-                        warning.shouldSell = false;
-                        this.save();
+                    } else {
+                        // 股价涨回到该档位以上了，又没有买入，直接删除就行
+                        if( stock.price > warning.price ) {
+                            stock.warningList.splice(i--, 1);
+                            this.save();
+                            continue;
+                        }
                     }
                 }
                 // 检查当前股价，如果低于建仓价则根据低于的比例生成档位提示
@@ -98,9 +103,11 @@ const v = new Vue({
                 // 反之，当前价高于股价则判断是否脱离成本区
                 else {
                     // 现价高出20%就算是脱离了吧
-                    if( stock.price / stock.buyPrice > 1.2 && !stock.hasLeftCostZone ) {
-                        stock.hasLeftCostZone = true;
-                        this.save();
+                    if( stock.price / stock.buyPrice > 1.2 ) {
+                        if( !stock.hasLeftCostZone ) {
+                            stock.hasLeftCostZone = true;
+                            this.save();
+                        }
                     } else if( stock.hasLeftCostZone ) {
                         stock.hasLeftCostZone = false;
                         this.save();
