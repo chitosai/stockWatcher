@@ -8,12 +8,19 @@ function getBeijingTime() {
 
 function isTradeTime() {
     const now = getBeijingTime();
+    const d = now.getDay();
+    // 周六日不交易
+    if( d == 0 || d == 6 ) {
+        return -1;
+    }
     const h = now.getHours();
     const m = now.getMinutes();
     if( h == 10 || h == 13 || h == 14 || h == 9 && m >= 30 || h == 11 && m < 30 ) {
-        return true;
+        return 1; // 开盘
+    } else if( h == 11 && m > 30 || h == 12 ) {
+        return 0; //休盘
     }
-    return false;
+    return -1; // 其余时间不交易
 }
 
 
@@ -22,7 +29,9 @@ const v = new Vue({
     data: {
         newStockId: '',
         newStockBuyPrice: '',
-        stockList: []
+        stockList: [],
+        bjDatetime: '',
+        isTradingTime: -1
     },
     methods: {
         alert(msg) {
@@ -180,11 +189,18 @@ const v = new Vue({
                 this.save();
             }
         },
-        async mainLoop() {
-            if( isTradeTime() ) {
+        mainLoop() {
+            if( ( this.isTradingTime = isTradeTime() ) > 0 ) {
                 this.frame();
             }
             setTimeout(this.mainLoop, 60 * 1000);
+        },
+        displayBJTime() {
+            function _(number) {
+                return number > 9 ? number : `0${number}`;
+            }
+            const d = getBeijingTime();
+            this.bjDatetime = `${_(d.getHours())}:${_(d.getMinutes())}:${_(d.getSeconds())}`;
         }
     },
     mounted() {
@@ -193,5 +209,7 @@ const v = new Vue({
         if( Notification.permission !== 'granted' ) {
             Notification.requestPermission();
         }
+        this.displayBJTime();
+        setInterval(this.displayBJTime, 1000);
     }
 });

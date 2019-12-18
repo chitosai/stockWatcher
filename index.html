@@ -8,8 +8,13 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="app">
-        <h1>持仓</h1>
+    <div id="app" v-cloak>
+        <h1>
+            {{ bjDatetime }}
+            <span class="red" v-if="isTradingTime == 1">交易中</span>
+            <span v-else-if="isTradingTime == 0">休盘</span>
+            <span v-else>收盘</span>
+        </h1>
         <div id="stock-list">
             <div class="stock" :class="{'has-left-cost-zone': stock.hasLeftCostZone}" v-for="stock in stockList">
                 <p class="stock-name">{{ stock.name }} <small>{{ stock.sid }}</small></p>
