@@ -24,11 +24,12 @@
                         第 {{ warning.id }} 层 - 
                         建议买入价：{{ warning.price }} 
                         <template v-if="warning.bought">
-                            <span>已买入</span>
-                            <button v-if="warning.shouldSell" @click="sell(warning, stock)">已卖出</button>
+                            <span>已买入</span> - 
+                            计划卖出价：{{ warning.price * 1.1 }}
+                            <button v-if="warning.shouldSell" @click="sell(warning, stock)">卖出</button>
                         </template>
                         <template v-else>
-                            <button @click="buy(warning)">已买入</button>
+                            <button @click="buy(warning)">买入</button>
                         </template>
                     </div>
                 </div>
